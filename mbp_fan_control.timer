@@ -1,0 +1,13 @@
+[Unit]
+Description=Runs mbp_fan_control every minute
+
+[Timer]
+# Time to wait after booting before first run
+OnBootSec=5min
+
+# Time between each run
+OnUnitActiveSec=1m
+Unit=mbp_fan_control.service
+
+[Install]
+WantedBy=multi-user.target

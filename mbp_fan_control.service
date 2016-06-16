@@ -1,0 +1,6 @@
+[Unit]
+Description=Controls Fan speed on Macbook Pro
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mbp_fan_control

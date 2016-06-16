@@ -1,0 +1,34 @@
+#!/bin/bash
+temp=`sensors | grep 'Physical id' | tr -s ' ' | cut -f 4 -d ' ' | cut -f 2 -d '+' | cut -f 1 -d '.'`
+adjusted=0
+if [ "$temp" -gt "79" ] ; then
+    adjusted=1
+    echo 5300 > /sys/devices/platform/applesmc.768/fan1_min
+    echo 5300 > /sys/devices/platform/applesmc.768/fan2_min
+else
+    if [ "$temp" -gt "69" ] ; then
+        adjusted=1
+        echo 4500 > /sys/devices/platform/applesmc.768/fan1_min
+        echo 4500 > /sys/devices/platform/applesmc.768/fan2_min
+    else
+        if [ "$temp" -gt "59" ] ; then
+            adjusted=1
+            echo 3700 > /sys/devices/platform/applesmc.768/fan1_min
+            echo 3700 > /sys/devices/platform/applesmc.768/fan2_min
+        else
+            if [ "$temp" -gt "49" ] ; then
+                adjusted=1
+                echo 3000 > /sys/devices/platform/applesmc.768/fan1_min
+                echo 3000 > /sys/devices/platform/applesmc.768/fan2_min
+            fi
+        fi
+    fi
+fi
+if [ "$adjusted" = "0" ] ; then
+    echo 2800 > /sys/devices/platform/applesmc.768/fan1_min
+    echo 2800 > /sys/devices/platform/applesmc.768/fan2_min
+fi
+echo "====" >> /tmp/mbp_fan_control.log
+date >> /tmp/mbp_fan_control.log
+cat /sys/devices/platform/applesmc.768/fan1_min >> /tmp/mbp_fan_control.log
+echo temp: $temp >> /tmp/mbp_fan_control.log
